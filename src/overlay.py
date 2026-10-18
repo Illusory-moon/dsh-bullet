@@ -42,10 +42,12 @@ ACCENT = "#5aa9ff"
 DOT = {"thinking": "#5aa9ff", "tool": "#ffb02d", "done": "#3ddc84", "idle": "#5a6270"}
 
 W, PAD = 460, 12
-HEAD_H = 28                      # 首行行高
+HEAD_H = 34                      # 首行行高：要给"思考中"和下面一行留出明显空档
 LINE_H = 24                      # 正文行高
 ICON_X = PAD + 4                 # 图标列左边缘：所有图标一律左对齐到这条线
 TEXT_X = PAD + 40                # 正文列左边缘（首行状态词也从这里起，两列各自对齐）
+# ⚒ 是 emoji，字形本身在宽度里偏右，单给一点负偏移才跟「思/答」对得上
+ICON_NUDGE = {"⚒": -4}
 
 
 def _alpha():
@@ -192,6 +194,10 @@ class Overlay:
         # GA_ROOT：真正的顶层窗口；对 canvas 取父窗口会让属性静默失效
         return ctypes.windll.user32.GetAncestor(self.canvas.winfo_id(), 2)
 
+    def _icon(self, y, glyph, color):
+        """图标列：统一左对齐，个别字形自带偏移的按 ICON_NUDGE 微调。"""
+        self._text(ICON_X + ICON_NUDGE.get(glyph, 0), y, glyph, color, self.f_body)
+
     def _text(self, x, y, text, fill, font, anchor="nw"):
         """一层淡阴影就够。
 
@@ -300,7 +306,7 @@ class Overlay:
             head += f"   ({notice})"
 
         # 状态词跟「思/⚒/答」同列起始 —— 主人要的就是这条左边缘对齐
-        self._text(ICON_X, y + 5, head, FG, self.f_status)
+        self._text(ICON_X, y + 3, head, FG, self.f_status)
         head_w = self.f_status.measure(head)
 
         # 呼吸点跟在状态词后面：不占图标的位，又能看出"它在动"
@@ -328,18 +334,18 @@ class Overlay:
         y += HEAD_H
 
         if has_thought:
-            self._text(ICON_X, y, "思", ACCENT, self.f_body)
+            self._icon(y, "思", ACCENT)
             self._text(TEXT_X, y, fit(st["thought"], self.f_body, inner), FG, self.f_body)
             y += LINE_H
         if has_tool:
-            self._text(ICON_X, y, "⚒", DOT["tool"], self.f_body)
+            self._icon(y, "⚒", DOT["tool"])
             txt = str(st["tool"] or "")
             if st.get("toolDetail"):
                 txt += "  " + str(st["toolDetail"])
             self._text(TEXT_X, y, fit(txt, self.f_mono, inner), "#e2e8f2", self.f_mono)
             y += LINE_H
         if has_said:
-            self._text(ICON_X, y, "答", DIM, self.f_body)
+            self._icon(y, "答", DIM)
             self._text(TEXT_X, y, fit(st["said"], self.f_body, inner), "#e8edf6", self.f_body)
 
 
