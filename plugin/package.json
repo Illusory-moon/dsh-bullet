@@ -1,0 +1,18 @@
+{
+  "name": "@local/dsh-bullet",
+  "version": "0.1.0",
+  "private": true,
+  "description": "弹幕姬桥：把 DSH 会话事件（思考/工具/回合起止）汇总成一个状态文件，并在回合开始时拉起桌面浮窗。",
+  "type": "module",
+  "main": "index.js",
+  "exports": "./index.js",
+  "meta": {
+    "title": "弹幕姬桥",
+    "description": "为桌面浮窗提供 agent 实时状态（思考一行 / 当前工具 / 回合起止）。"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}

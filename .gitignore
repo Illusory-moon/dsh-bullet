@@ -1,0 +1,14 @@
+# 运行时 / 本地产物
+__pycache__/
+*.py[cod]
+*.log
+*.pid
+
+# 冒烟截图：含本机桌面内容，绝不入库
+probe/smoke.png
+probe/_diag/
+
+# 编辑器
+.vscode/
+.idea/
+.DS_Store

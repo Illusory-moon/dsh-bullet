@@ -1,0 +1,4 @@
+# 弹幕姬桥：订阅会话事件，写 ~/.dsh/bullet/state.json，并起停桌面浮窗。
+- insert:
+    - id: bullet-bridge
+      name: '@local/dsh-bullet'
