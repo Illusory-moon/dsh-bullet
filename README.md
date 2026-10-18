@@ -91,6 +91,22 @@ pwsh -File tools\uninstall.ps1          # 摘掉插件与链接，保留运行�
 pwsh -File tools\uninstall.ps1 -Purge   # 连 ~/.dsh/bullet 一起删
 ```
 
+## 常见问题
+
+**`git push` 报 `Connection was reset` / 超时**：`github.com` 直连不稳时给本仓库挂代理（只影响这个仓库）：
+
+```powershell
+git config --local http.proxy  http://127.0.0.1:7890
+git config --local https.proxy http://127.0.0.1:7890
+# 推完想撤掉：git config --local --unset http.proxy
+```
+
+**浮窗不出现**：按顺序查 `~/.dsh/bullet/` 下的 `debug.jsonl`（插件是否收到事件）→
+`overlay.log` / `inputbar.log`（窗口自己是否起来）→ 都没有就说明插件没加载，`tools\install.ps1` 重装后重启 DSH。
+
+**改了界面不生效**：`src/*.py` 改动只需 `tools\restart-ui.ps1`；
+`plugin/*.js` 改动**必须重启 DSH**（插件模块在宿主进程里）。
+
 ## 参考
 
 - 透明穿透浮窗的实现参考了 [NousResearch/hermes-agent 的 `overlay.py`](https://github.com/NousResearch/hermes-agent/commit/07b57d895930f4e2f85ed4edc4dfcce4817f0176)
